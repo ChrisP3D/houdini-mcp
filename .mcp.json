@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "houdini": {
+      "command": "/Users/chrisp/.local/bin/uv",
+      "args": [
+        "run",
+        "--directory",
+        "/Users/chrisp/Documents/houdini-mcp",
+        "python",
+        "/Users/chrisp/Documents/houdini-mcp/houdini_mcp_server.py"
+      ],
+      "env": {
+        "HOUDINI_HOST": "REPLACE_WITH_WINDOWS_LAN_IP",
+        "HOUDINI_PORT": "9876"
+      }
+    }
+  }
+}

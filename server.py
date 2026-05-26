@@ -35,9 +35,10 @@ EXTENSION_VERSION = (0, 1)
 EXTENSION_DESCRIPTION = "Connect Houdini to Claude via MCP"
 
 class HoudiniMCPServer:
-    def __init__(self, host='localhost', port=9876):
-        self.host = host
-        self.port = port
+    def __init__(self, host=None, port=None):
+        # Allow override from env so Houdini-side can bind to 0.0.0.0 for remote control
+        self.host = host or os.environ.get("HOUDINI_MCP_BIND_HOST", "0.0.0.0")
+        self.port = port or int(os.environ.get("HOUDINI_MCP_BIND_PORT", "9876"))
         self.running = False
         self.socket = None
         self.client = None

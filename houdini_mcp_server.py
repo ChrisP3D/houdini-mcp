@@ -518,8 +518,10 @@ def get_houdini_connection() -> HoudiniConnection:
     """Get or create a persistent HoudiniConnection object."""
     global _houdini_connection
     if _houdini_connection is None:
-        logger.info("Creating new HoudiniConnection.")
-        _houdini_connection = HoudiniConnection(host="localhost", port=9876)
+        host = os.environ.get("HOUDINI_HOST", "localhost")
+        port = int(os.environ.get("HOUDINI_PORT", "9876"))
+        logger.info(f"Creating new HoudiniConnection to {host}:{port}")
+        _houdini_connection = HoudiniConnection(host=host, port=port)
 
     # Always try to connect, returns True if already connected or successful now
     if not _houdini_connection.connect():
@@ -891,9 +893,7 @@ def main():
     """Run the MCP server on stdio."""
     # Check necessary RapidAPI variables are set before running
     if not RAPIDAPI_HOST_URL or not RAPIDAPI_HOST or not RAPIDAPI_KEY:
-         logger.critical("RAPIDAPI_HOST_URL, RAPIDAPI_HOST, and RAPIDAPI_KEY environment variables are not set. Please configure urls.env.")
-         logger.critical("Server will not start.")
-         sys.exit(1) # Exit if critical configuration is missing
+         logger.warning("RAPIDAPI_* env vars not set — OPUS tools will fail, but core Houdini control tools still work.")
          
     logger.info(f"Using RapidAPI Host URL: {RAPIDAPI_HOST_URL}")
     logger.info(f"Using RapidAPI Host Header: {RAPIDAPI_HOST}")
